@@ -1,0 +1,37 @@
+{
+  "name": "viber-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the Viber Bot REST API",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "viber-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "mcp",
+    "viber",
+    "bot",
+    "model-context-protocol"
+  ],
+  "author": "Serhii Zghama <zmrser@gmail.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.29.2",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
+  }
+}
