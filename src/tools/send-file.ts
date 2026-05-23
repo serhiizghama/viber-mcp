@@ -1,0 +1,31 @@
+import { z } from "zod";
+import { ViberApiError } from "../errors.js";
+import type { ToolDefinition, ToolResult } from "./index.js";
+import type { ViberClient } from "../viber/client.js";
+
+export const sendFileTool: ToolDefinition = {
+  name: "send_file",
+  description: "Send a file attachment to a Viber user",
+  inputSchema: {
+    receiver: z.string().describe("Viber user ID of the receiver"),
+    media: z.string().url().describe("Public URL of the file (≤50MB; see Viber docs for forbidden extensions)"),
+    size: z.number().int().positive().describe("File size in bytes"),
+    file_name: z.string().max(256).describe("File name with extension"),
+    sender_name: z.string().max(28).optional().describe("Display name override (≤28 chars)"),
+    sender_avatar: z.string().url().optional().describe("Avatar URL override"),
+  },
+  async handler(input: Record<string, unknown>, client: ViberClient): Promise<ToolResult> {
+    try {
+      const result = await client.sendFile(input as Parameters<ViberClient["sendFile"]>[0]);
+      return {
+        content: [{ type: "text", text: `File sent. message_token=${result.message_token}` }],
+        structuredContent: result,
+      };
+    } catch (err) {
+      const msg = err instanceof ViberApiError
+        ? `Viber API error ${err.status}: ${err.statusMessage}`
+        : err instanceof Error ? err.message : "Unknown error";
+      return { content: [{ type: "text", text: msg }], isError: true };
+    }
+  },
+};

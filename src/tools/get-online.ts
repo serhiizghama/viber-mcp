@@ -1,0 +1,29 @@
+import { z } from "zod";
+import { ViberApiError } from "../errors.js";
+import type { ToolDefinition, ToolResult } from "./index.js";
+import type { ViberClient } from "../viber/client.js";
+
+export const getOnlineTool: ToolDefinition = {
+  name: "get_online",
+  description: "Check online status of up to 100 Viber users",
+  inputSchema: {
+    ids: z.array(z.string()).min(1).max(100).describe("Array of Viber user IDs (max 100)"),
+  },
+  async handler(input: Record<string, unknown>, client: ViberClient): Promise<ToolResult> {
+    try {
+      const result = await client.getOnline(input.ids as string[]);
+      const summary = result.users
+        .map((u) => `${u.id}: ${u.online_status_message}`)
+        .join(", ");
+      return {
+        content: [{ type: "text", text: `Online status: ${summary}` }],
+        structuredContent: result,
+      };
+    } catch (err) {
+      const msg = err instanceof ViberApiError
+        ? `Viber API error ${err.status}: ${err.statusMessage}`
+        : err instanceof Error ? err.message : "Unknown error";
+      return { content: [{ type: "text", text: msg }], isError: true };
+    }
+  },
+};
