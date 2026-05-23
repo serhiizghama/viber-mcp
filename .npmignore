@@ -1,0 +1,14 @@
+src/
+tests/
+docs/
+examples/
+.github/
+.claude/
+.omc/
+*.tsbuildinfo
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+.gitignore
+.env*
+coverage/
