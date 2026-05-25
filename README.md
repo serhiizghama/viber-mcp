@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/viber-mcp"><img src="https://img.shields.io/npm/v/viber-mcp?color=blue" alt="npm version" /></a>
-  <a href="https://www.npmjs.com/package/viber-mcp"><img src="https://img.shields.io/npm/dt/viber-mcp" alt="npm downloads" /></a>
+  <a href="https://github.com/serhiizghama/viber-mcp/actions/workflows/ci.yml"><img src="https://github.com/serhiizghama/viber-mcp/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="https://github.com/serhiizghama/viber-mcp"><img src="https://img.shields.io/github/stars/serhiizghama/viber-mcp?style=social" alt="GitHub stars" /></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/npm/l/viber-mcp" alt="License" /></a>
-  <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/viber-mcp" alt="Node.js" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License" /></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D20-brightgreen" alt="Node.js >= 20" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-strict-blue" alt="TypeScript strict" /></a>
 </p>
 
 ---
