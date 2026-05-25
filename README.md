@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Viber_icon.svg/120px-Viber_icon.svg.png" width="80" alt="Viber" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Viber_logo_2018_%28without_text%29.svg" width="80" alt="Viber" />
   <br/>
   <strong>viber-mcp</strong>
 </p>
