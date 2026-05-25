@@ -42,13 +42,13 @@ Viber has over 1 billion registered users, particularly strong in Ukraine, Easte
 Try it instantly -- no install required:
 
 ```bash
-VIBER_AUTH_TOKEN=your-token npx viber-mcp
+VIBER_AUTH_TOKEN=your-token npx @serhii.zghama/viber-mcp
 ```
 
 Or install globally:
 
 ```bash
-npm install -g viber-mcp
+npm install -g @serhii.zghama/viber-mcp
 ```
 
 ## Setup
@@ -65,7 +65,7 @@ Add to your config file:
   "mcpServers": {
     "viber": {
       "command": "npx",
-      "args": ["-y", "viber-mcp"],
+      "args": ["-y", "@serhii.zghama/viber-mcp"],
       "env": {
         "VIBER_AUTH_TOKEN": "your-bot-token-here",
         "VIBER_SENDER_NAME": "MyBot"
@@ -75,14 +75,14 @@ Add to your config file:
 }
 ```
 
-> **Windows note:** Replace `"command": "npx"` with `"command": "cmd"` and `"args"` with `["/c", "npx", "-y", "viber-mcp"]`.
+> **Windows note:** Replace `"command": "npx"` with `"command": "cmd"` and `"args"` with `["/c", "npx", "-y", "@serhii.zghama/viber-mcp"]`.
 
 Restart Claude Desktop. The Viber tools will appear in the tools menu.
 
 ### Claude Code
 
 ```bash
-claude mcp add viber-mcp -e VIBER_AUTH_TOKEN=your-bot-token-here -- npx -y viber-mcp
+claude mcp add viber-mcp -e VIBER_AUTH_TOKEN=your-bot-token-here -- npx -y @serhii.zghama/viber-mcp
 ```
 
 ### Cursor
@@ -93,7 +93,7 @@ Open **Settings > MCP Servers**, click **+ Add**, and paste:
 {
   "viber": {
     "command": "npx",
-    "args": ["-y", "viber-mcp"],
+    "args": ["-y", "@serhii.zghama/viber-mcp"],
     "env": {
       "VIBER_AUTH_TOKEN": "your-bot-token-here"
     }
@@ -110,7 +110,7 @@ Add to `.vscode/mcp.json` in your workspace:
   "servers": {
     "viber": {
       "command": "npx",
-      "args": ["-y", "viber-mcp"],
+      "args": ["-y", "@serhii.zghama/viber-mcp"],
       "env": {
         "VIBER_AUTH_TOKEN": "your-bot-token-here"
       }
