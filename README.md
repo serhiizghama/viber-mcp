@@ -25,7 +25,7 @@ Viber has over 1 billion registered users, particularly strong in Ukraine, Easte
 ## How it works
 
 ```
-┌──────────────────────┐         stdio          ┌──────────────────────┐
+┌──────────────────────┐         stdio           ┌──────────────────────┐
 │                      │  ◄───────────────────►  │                      │
 │   MCP Client         │    JSON-RPC over        │   viber-mcp          │
 │                      │    stdin/stdout         │                      │
