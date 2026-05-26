@@ -5,12 +5,12 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendVideoTool: ToolDefinition = {
   name: "send_video",
-  description: "Send a video to a Viber user",
+  description: "Send an MP4 video (≤26MB, ≤180s) to a Viber user via public URL. Requires the file size in bytes — ask the user to provide it if unknown.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     media: z.string().url().describe("Public URL of the video (MP4/H.264, ≤26MB, ≤180s)"),
-    size: z.number().int().positive().describe("Video size in bytes"),
-    duration: z.number().int().positive().max(180).optional().describe("Video duration in seconds"),
+    size: z.number().int().positive().describe("Video size in bytes. Ask the user to provide this if not known."),
+    duration: z.number().int().positive().max(180).optional().describe("Video duration in seconds (≤180)"),
     thumbnail: z.string().url().optional().describe("Thumbnail URL"),
     sender_name: z.string().max(28).optional().describe("Display name override (≤28 chars)"),
     sender_avatar: z.string().url().optional().describe("Avatar URL override"),
