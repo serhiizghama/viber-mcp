@@ -5,11 +5,11 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendLocationTool: ToolDefinition = {
   name: "send_location",
-  description: "Send GPS coordinates to a Viber user",
+  description: "Send a map pin with GPS coordinates to a Viber user. The recipient sees an interactive map. Use when sharing a meeting point, address, or place of interest. Returns message_token for delivery tracking.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
-    latitude: z.number().min(-90).max(90).describe("Latitude"),
-    longitude: z.number().min(-180).max(180).describe("Longitude"),
+    latitude: z.number().min(-90).max(90).describe("Latitude in decimal degrees (e.g. 50.4501 for Kyiv)"),
+    longitude: z.number().min(-180).max(180).describe("Longitude in decimal degrees (e.g. 30.5234 for Kyiv)"),
     sender_name: z.string().max(28).optional().describe("Display name override (≤28 chars)"),
     sender_avatar: z.string().url().optional().describe("Avatar URL override"),
   },

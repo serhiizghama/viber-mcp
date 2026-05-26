@@ -5,10 +5,10 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendUrlTool: ToolDefinition = {
   name: "send_url",
-  description: "Send a clickable URL to a Viber user",
+  description: "Send a URL that renders as a tappable link with preview in Viber. Use when a link is the primary content of the message. Do not use if the URL is part of longer text — embed it in send_message text instead. Returns message_token for delivery tracking.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
-    media: z.string().url().max(2000).describe("The URL to send"),
+    media: z.string().url().max(2000).describe("URL to send (https://..., ≤2000 chars); displayed as a tappable link with preview"),
     sender_name: z.string().max(28).optional().describe("Display name override (≤28 chars)"),
     sender_avatar: z.string().url().optional().describe("Avatar URL override"),
   },

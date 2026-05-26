@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const setWebhookTool: ToolDefinition = {
   name: "set_webhook",
-  description: "Register a webhook URL for receiving Viber events",
+  description: "Register or update the HTTPS webhook URL that Viber calls for incoming events (messages, subscriptions, delivery receipts). Call once during bot setup or when the URL changes. Replaces any existing webhook. Returns the confirmed list of subscribed event types.",
   inputSchema: {
     url: z.string().url().describe("HTTPS URL with valid CA-issued SSL cert"),
     event_types: z.array(z.enum([

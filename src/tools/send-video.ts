@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendVideoTool: ToolDefinition = {
   name: "send_video",
-  description: "Send an MP4 video (≤26MB, ≤180s) to a Viber user via public URL. Requires the file size in bytes — ask the user to provide it if unknown.",
+  description: "Send an MP4 video (≤26MB, ≤180s) to a Viber user via public URL. Use when sharing short video clips. Do not use for audio-only files — use send_file instead. Requires file size in bytes; ask the user if unknown. Returns message_token for delivery tracking.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     media: z.string().url().describe("Public URL of the video (MP4/H.264, ≤26MB, ≤180s)"),

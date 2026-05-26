@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendPictureTool: ToolDefinition = {
   name: "send_picture",
-  description: "Send an image with optional caption to a Viber user",
+  description: "Send a JPEG or PNG image with an optional caption to a Viber user. Use when sharing visual content such as photos, screenshots, or diagrams. Do not use for videos or documents — use send_video or send_file instead. Returns message_token for delivery tracking.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     media: z.string().url().describe("Public URL of the image (JPEG/PNG, ≤1MB iOS / ≤3MB Android)"),

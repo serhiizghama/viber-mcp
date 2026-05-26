@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const getUserDetailsTool: ToolDefinition = {
   name: "get_user_details",
-  description: "Fetch profile details of a Viber user",
+  description: "Fetch profile details of a Viber user: name, avatar URL, country, language, API version, and device type. Use to personalise messages or verify user identity. Rate-limited to 2 calls per user per 12 hours — cache results when possible. Returns user profile object.",
   inputSchema: {
     id: z.string().describe("Viber user ID. Note: Viber rate-limits this to 2 calls per 12h per user — cache results if possible."),
   },

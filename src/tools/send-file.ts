@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendFileTool: ToolDefinition = {
   name: "send_file",
-  description: "Send a file attachment (≤50MB) to a Viber user via public URL. Requires the file size in bytes and filename with extension — ask the user to provide these if unknown.",
+  description: "Send a file attachment (≤50MB) to a Viber user via public URL. Use for PDFs, documents, or spreadsheets. Forbidden extensions: exe, bat, vbs, cmd. Requires file size in bytes and filename with extension; ask the user if unknown. Returns message_token for delivery tracking.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     media: z.string().url().describe("Public URL of the file (≤50MB; forbidden: exe, bat, vbs, cmd, etc.)"),

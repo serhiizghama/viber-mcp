@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendMessageTool: ToolDefinition = {
   name: "send_message",
-  description: "Send a text message to a Viber user",
+  description: "Send a text message to a subscribed Viber user. Use for plain-text replies or notifications. Do not use for bulk messaging — use broadcast_message instead. Returns message_token for delivery tracking.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver (obtained from a previous incoming event)"),
     text: z.string().min(1).max(7000).describe("Message text, up to 7000 characters"),

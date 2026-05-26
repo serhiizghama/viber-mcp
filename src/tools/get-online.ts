@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const getOnlineTool: ToolDefinition = {
   name: "get_online",
-  description: "Check online status of up to 100 Viber users",
+  description: "Check whether up to 100 Viber users are currently online. Returns per-user status: online, offline, or undisclosed. Use before sending time-sensitive messages to prioritise active users. Note: some users may hide their status via privacy settings.",
   inputSchema: {
     ids: z.array(z.string()).min(1).max(100).describe("Array of Viber user IDs (max 100)"),
   },

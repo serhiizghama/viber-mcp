@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const removeWebhookTool: ToolDefinition = {
   name: "remove_webhook",
-  description: "Disable the currently registered webhook",
+  description: "Disable the currently registered webhook, stopping all incoming Viber event callbacks. Use when decommissioning the bot or before switching endpoints via set_webhook. No parameters required.",
   inputSchema: {},
   async handler(_input: Record<string, unknown>, client: ViberClient): Promise<ToolResult> {
     try {

@@ -5,11 +5,11 @@ import type { ViberClient } from "../viber/client.js";
 
 export const sendContactTool: ToolDefinition = {
   name: "send_contact",
-  description: "Send a contact card to a Viber user",
+  description: "Send a contact card (name + phone number) to a Viber user. The recipient can save it directly to their phone contacts. Use when sharing a person's contact info. Returns message_token for delivery tracking.",
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
-    name: z.string().max(28).describe("Contact name"),
-    phone_number: z.string().max(18).describe("Contact phone number"),
+    name: z.string().max(28).describe("Contact full name (≤28 chars)"),
+    phone_number: z.string().max(18).describe("Phone number in international format (e.g. +380501234567)"),
     sender_name: z.string().max(28).optional().describe("Display name override (≤28 chars)"),
     sender_avatar: z.string().url().optional().describe("Avatar URL override"),
   },

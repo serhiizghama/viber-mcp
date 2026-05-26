@@ -5,7 +5,7 @@ import type { ViberClient } from "../viber/client.js";
 
 export const getAccountInfoTool: ToolDefinition = {
   name: "get_account_info",
-  description: "Get the Viber bot account configuration including subscriber count and member list",
+  description: "Retrieve bot account details: name, URI, icon, subscriber count, webhook URL, and subscribed event types. Use to verify bot configuration or check subscriber count. No parameters required. Returns full account configuration object.",
   inputSchema: {},
   async handler(_input: Record<string, unknown>, client: ViberClient): Promise<ToolResult> {
     try {
