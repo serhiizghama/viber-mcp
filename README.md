@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/@serhii.zghama/viber-mcp"><img src="https://img.shields.io/npm/v/%40serhii.zghama%2Fviber-mcp" alt="npm version" /></a>
   <a href="https://github.com/serhiizghama/viber-mcp/actions/workflows/ci.yml"><img src="https://github.com/serhiizghama/viber-mcp/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="https://github.com/serhiizghama/viber-mcp"><img src="https://img.shields.io/github/stars/serhiizghama/viber-mcp?style=social" alt="GitHub stars" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License" /></a>
