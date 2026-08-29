@@ -1,11 +1,17 @@
 import { z } from "zod";
-import { ViberApiError } from "../errors.js";
+import { formatToolError } from "./format-error.js";
 import type { ToolDefinition, ToolResult } from "./index.js";
 import type { ViberClient } from "../viber/client.js";
 
 export const sendLocationTool: ToolDefinition = {
   name: "send_location",
   description: "Send a map pin with GPS coordinates to a Viber user. The recipient sees an interactive map. Use when sharing a meeting point, address, or place of interest. Returns message_token for delivery tracking.",
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     latitude: z.number().min(-90).max(90).describe("Latitude in decimal degrees (e.g. 50.4501 for Kyiv)"),
@@ -21,10 +27,7 @@ export const sendLocationTool: ToolDefinition = {
         structuredContent: result,
       };
     } catch (err) {
-      const msg = err instanceof ViberApiError
-        ? `Viber API error ${err.status}: ${err.statusMessage}`
-        : err instanceof Error ? err.message : "Unknown error";
-      return { content: [{ type: "text", text: msg }], isError: true };
+      return formatToolError(err);
     }
   },
 };

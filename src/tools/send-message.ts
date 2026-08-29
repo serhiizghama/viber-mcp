@@ -1,11 +1,17 @@
 import { z } from "zod";
-import { ViberApiError } from "../errors.js";
+import { formatToolError } from "./format-error.js";
 import type { ToolDefinition, ToolResult } from "./index.js";
 import type { ViberClient } from "../viber/client.js";
 
 export const sendMessageTool: ToolDefinition = {
   name: "send_message",
   description: "Send a text message to a subscribed Viber user. Use for plain-text replies or notifications. Do not use for bulk messaging — use broadcast_message instead. Returns message_token for delivery tracking.",
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver (obtained from a previous incoming event)"),
     text: z.string().min(1).max(7000).describe("Message text, up to 7000 characters"),
@@ -21,10 +27,7 @@ export const sendMessageTool: ToolDefinition = {
         structuredContent: result,
       };
     } catch (err) {
-      const msg = err instanceof ViberApiError
-        ? `Viber API error ${err.status}: ${err.statusMessage}`
-        : err instanceof Error ? err.message : "Unknown error";
-      return { content: [{ type: "text", text: msg }], isError: true };
+      return formatToolError(err);
     }
   },
 };

@@ -190,7 +190,7 @@ pnpm install
 | `pnpm build` | Build with tsup (ESM, Node 20+) |
 | `pnpm dev` | Build with file watching |
 | `pnpm typecheck` | Run TypeScript strict checks |
-| `pnpm test` | Run vitest (36 tests) |
+| `pnpm test` | Run vitest (43 tests) |
 
 ### Project structure
 

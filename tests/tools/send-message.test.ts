@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { sendMessageTool } from "../../src/tools/send-message.js";
-import { ViberApiError } from "../../src/errors.js";
+import { ViberApiError, ViberNetworkError } from "../../src/errors.js";
 import { createMockClient, createErrorClient } from "../helpers/mock-client.js";
 
 describe("send_message tool", () => {
@@ -31,5 +31,23 @@ describe("send_message tool", () => {
     );
     expect(result.isError).toBe(true);
     expect(result.content[0].text).toBe("network failure");
+  });
+
+  it("surfaces a ViberNetworkError message", async () => {
+    const client = createErrorClient(
+      new ViberNetworkError(
+        "Network error calling Viber API send_message: ECONNREFUSED",
+        "send_message",
+        new TypeError("fetch failed"),
+      ),
+    );
+    const result = await sendMessageTool.handler(
+      { receiver: "x", text: "hi" },
+      client,
+    );
+    expect(result.isError).toBe(true);
+    expect(result.content[0].text).toBe(
+      "Network error calling Viber API send_message: ECONNREFUSED",
+    );
   });
 });

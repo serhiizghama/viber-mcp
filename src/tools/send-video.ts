@@ -1,11 +1,17 @@
 import { z } from "zod";
-import { ViberApiError } from "../errors.js";
+import { formatToolError } from "./format-error.js";
 import type { ToolDefinition, ToolResult } from "./index.js";
 import type { ViberClient } from "../viber/client.js";
 
 export const sendVideoTool: ToolDefinition = {
   name: "send_video",
   description: "Send an MP4 video (≤26MB, ≤180s) to a Viber user via public URL. Use when sharing short video clips. Do not use for audio-only files — use send_file instead. Requires file size in bytes; ask the user if unknown. Returns message_token for delivery tracking.",
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     media: z.string().url().describe("Public URL of the video (MP4/H.264, ≤26MB, ≤180s)"),
@@ -23,10 +29,7 @@ export const sendVideoTool: ToolDefinition = {
         structuredContent: result,
       };
     } catch (err) {
-      const msg = err instanceof ViberApiError
-        ? `Viber API error ${err.status}: ${err.statusMessage}`
-        : err instanceof Error ? err.message : "Unknown error";
-      return { content: [{ type: "text", text: msg }], isError: true };
+      return formatToolError(err);
     }
   },
 };

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { ViberClient } from "../src/viber/client.js";
-import { ViberApiError } from "../src/errors.js";
+import { ViberApiError, ViberNetworkError } from "../src/errors.js";
 import type { Config } from "../src/config.js";
 
 const TEST_CONFIG: Readonly<Config> = Object.freeze({
@@ -18,6 +18,10 @@ function mockFetchSuccess(data: unknown): void {
       headers: { "Content-Type": "application/json" },
     }),
   );
+}
+
+function mockFetchReject(error: unknown): void {
+  vi.spyOn(globalThis, "fetch").mockRejectedValueOnce(error);
 }
 
 function mockFetchHttpError(status: number): void {
@@ -177,6 +181,60 @@ describe("ViberClient", () => {
         vi.mocked(globalThis.fetch).mock.calls[0][1]?.body as string,
       ) as Record<string, unknown>;
       expect(body.url).toBe("");
+    });
+  });
+
+  describe("network failures", () => {
+    it("wraps a connection failure in ViberNetworkError with the cause code", async () => {
+      mockFetchReject(
+        Object.assign(new TypeError("fetch failed"), {
+          cause: Object.assign(new Error("connect ECONNREFUSED 127.0.0.1:9"), {
+            code: "ECONNREFUSED",
+          }),
+        }),
+      );
+
+      const promise = client.sendMessage({ receiver: "user123", text: "Hi" });
+
+      await expect(promise).rejects.toThrow(ViberNetworkError);
+      await expect(promise).rejects.toThrow(/ECONNREFUSED/);
+      await expect(promise).rejects.toThrow(/send_message/);
+    });
+
+    it("falls back to the cause message when there is no code", async () => {
+      mockFetchReject(
+        Object.assign(new TypeError("fetch failed"), {
+          cause: new Error("bad port"),
+        }),
+      );
+
+      await expect(
+        client.sendMessage({ receiver: "user123", text: "Hi" }),
+      ).rejects.toThrow(/Network error calling Viber API send_message: bad port/);
+    });
+
+    it("reports the configured timeout on TimeoutError", async () => {
+      mockFetchReject(
+        Object.assign(new Error("The operation was aborted due to timeout"), {
+          name: "TimeoutError",
+        }),
+      );
+
+      const promise = client.getAccountInfo();
+
+      await expect(promise).rejects.toThrow(ViberNetworkError);
+      await expect(promise).rejects.toThrow(
+        /Viber API get_account_info timed out after 15000ms/,
+      );
+    });
+
+    it("preserves the original error as cause", async () => {
+      const original = new TypeError("fetch failed");
+      mockFetchReject(original);
+
+      await expect(
+        client.sendMessage({ receiver: "user123", text: "Hi" }),
+      ).rejects.toMatchObject({ cause: original, endpoint: "send_message" });
     });
   });
 });

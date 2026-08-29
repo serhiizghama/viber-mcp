@@ -1,11 +1,17 @@
 import { z } from "zod";
-import { ViberApiError } from "../errors.js";
+import { formatToolError } from "./format-error.js";
 import type { ToolDefinition, ToolResult } from "./index.js";
 import type { ViberClient } from "../viber/client.js";
 
 export const sendContactTool: ToolDefinition = {
   name: "send_contact",
   description: "Send a contact card (name + phone number) to a Viber user. The recipient can save it directly to their phone contacts. Use when sharing a person's contact info. Returns message_token for delivery tracking.",
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     name: z.string().max(28).describe("Contact full name (≤28 chars)"),
@@ -21,10 +27,7 @@ export const sendContactTool: ToolDefinition = {
         structuredContent: result,
       };
     } catch (err) {
-      const msg = err instanceof ViberApiError
-        ? `Viber API error ${err.status}: ${err.statusMessage}`
-        : err instanceof Error ? err.message : "Unknown error";
-      return { content: [{ type: "text", text: msg }], isError: true };
+      return formatToolError(err);
     }
   },
 };

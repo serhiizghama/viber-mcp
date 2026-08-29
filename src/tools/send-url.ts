@@ -1,11 +1,17 @@
 import { z } from "zod";
-import { ViberApiError } from "../errors.js";
+import { formatToolError } from "./format-error.js";
 import type { ToolDefinition, ToolResult } from "./index.js";
 import type { ViberClient } from "../viber/client.js";
 
 export const sendUrlTool: ToolDefinition = {
   name: "send_url",
   description: "Send a URL that renders as a tappable link with preview in Viber. Use when a link is the primary content of the message. Do not use if the URL is part of longer text — embed it in send_message text instead. Returns message_token for delivery tracking.",
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: true,
+  },
   inputSchema: {
     receiver: z.string().describe("Viber user ID of the receiver"),
     media: z.string().url().max(2000).describe("URL to send (https://..., ≤2000 chars); displayed as a tappable link with preview"),
@@ -20,10 +26,7 @@ export const sendUrlTool: ToolDefinition = {
         structuredContent: result,
       };
     } catch (err) {
-      const msg = err instanceof ViberApiError
-        ? `Viber API error ${err.status}: ${err.statusMessage}`
-        : err instanceof Error ? err.message : "Unknown error";
-      return { content: [{ type: "text", text: msg }], isError: true };
+      return formatToolError(err);
     }
   },
 };

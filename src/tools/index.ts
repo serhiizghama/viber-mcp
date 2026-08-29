@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import type { ViberClient } from "../viber/client.js";
 
 export interface ToolResult {
@@ -11,11 +12,14 @@ export interface ToolDefinition {
   name: string;
   description: string;
   inputSchema: Record<string, z.ZodType>;
+  annotations?: ToolAnnotations;
   handler: (
     input: Record<string, unknown>,
     client: ViberClient,
   ) => Promise<ToolResult>;
 }
+
+export { formatToolError } from "./format-error.js";
 
 export { sendMessageTool } from "./send-message.js";
 export { sendPictureTool } from "./send-picture.js";

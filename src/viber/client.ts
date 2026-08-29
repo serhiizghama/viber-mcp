@@ -1,5 +1,5 @@
 import type { Config } from "../config.js";
-import { ViberApiError } from "../errors.js";
+import { ViberApiError, ViberNetworkError } from "../errors.js";
 import type {
   AccountInfoResponse,
   BroadcastMessageRequest,
@@ -22,6 +22,38 @@ import type {
   WebhookResponse,
 } from "./types.js";
 
+function errorName(err: unknown): string | undefined {
+  if (typeof err === "object" && err !== null && "name" in err) {
+    const { name } = err as { name?: unknown };
+    return typeof name === "string" ? name : undefined;
+  }
+  return undefined;
+}
+
+/**
+ * Node's `fetch` reports transport failures as a bare "fetch failed" TypeError
+ * and hides the useful detail (ECONNREFUSED, ENOTFOUND, ...) in `cause`.
+ */
+function networkReason(err: unknown): string {
+  const cause = err instanceof Error ? err.cause : undefined;
+
+  if (typeof cause === "object" && cause !== null) {
+    const { code, message } = cause as { code?: unknown; message?: unknown };
+    if (typeof code === "string" && code.length > 0) {
+      return code;
+    }
+    if (typeof message === "string" && message.length > 0) {
+      return message;
+    }
+  }
+
+  if (err instanceof Error && err.message.length > 0) {
+    return err.message;
+  }
+
+  return String(err);
+}
+
 export class ViberClient {
   private readonly authToken: string;
   private readonly baseUrl: string;
@@ -43,15 +75,32 @@ export class ViberClient {
     body: TReq,
   ): Promise<TRes> {
     const url = `${this.baseUrl}/${endpoint}`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "X-Viber-Auth-Token": this.authToken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(this.timeoutMs),
-    });
+
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-Viber-Auth-Token": this.authToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(this.timeoutMs),
+      });
+    } catch (err) {
+      if (errorName(err) === "TimeoutError") {
+        throw new ViberNetworkError(
+          `Viber API ${endpoint} timed out after ${this.timeoutMs}ms`,
+          endpoint,
+          err,
+        );
+      }
+      throw new ViberNetworkError(
+        `Network error calling Viber API ${endpoint}: ${networkReason(err)}`,
+        endpoint,
+        err,
+      );
+    }
 
     if (!response.ok) {
       throw new ViberApiError(
